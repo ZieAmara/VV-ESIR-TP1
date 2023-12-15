@@ -44,6 +44,22 @@
 
 2. ### Apache Commons projects
 
+> Among the solved bugs of Apache Commons Proposed, I chose the [COLLECTION-814](https://issues.apache.org/jira/projects/COLLECTIONS/issues/COLLECTIONS-814?filter=doneissues).
+>
+> > Here, we are facing a local bug.
 
+> *CollectionUtils* is a class of Apache commons that provides utility methods and decorators for collection instances. one of these methods is *removeAll* with the signature `public static <E> List<E> removeAll(Collection<E> collection, Collection<? > remove) {}`. this method Removes the elements in *"remove"* from *"collection"*.
 
+> According to the documentation, *remmoveAll* must throw a NullPointerException (NPE) when one of the *"remove"* or *"collection"* parameters is null. Instead, we see that NPE is launched only if the *"collection"* parameter is empty.
 
+> To solve this problem, contributors of this project used the `requireNonNull(T obj, String message)` method of the *Objects* class. This method checks that the reference of the specified object is not null and raises a custom NPE if this is the case.
+> ```
+> Objects.requireNonNull(collection, "collection");
+> Objects.requireNonNull(remove, "remove");
+> ```
+
+> Pour s'assurer que le bogue est détecté s'il réapparaît à l'avenir, les contributeurs ont ajouté de nouveaux cas de tests à la suite de test.
+> ```
+> assertThrows(NullPointerException.class, () -> ListUtils.removeAll(null, new ArrayList<Object>()), "expecting NullPointerException");
+> assertThrows(NullPointerException.class, () -> ListUtils.removeAll(new ArrayList<Object>(), null), "expecting NullPointerException");
+> ```
