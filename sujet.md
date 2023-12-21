@@ -42,7 +42,7 @@
 
 > It is important to note that the detection of defects often depends on the quality of the test processes and vigilance in identifying relevant scenarios. Defects can sometimes escape testing, and in the case of the ignition switch problem, there were criticisms of General Motors' testing process and the management of information related to the problem.
 
-2. ### Apache Commons projects
+2. ### Apache Commons projects :
 
 > Among the solved bugs of Apache Commons Proposed, I chose the [COLLECTION-814](https://issues.apache.org/jira/projects/COLLECTIONS/issues/COLLECTIONS-814?filter=doneissues).
 >
@@ -64,5 +64,57 @@
 > assertThrows(NullPointerException.class, () -> ListUtils.removeAll(new ArrayList<Object>(), null), "expecting NullPointerException");
 > ```
 
-### Chaos Engineering
- 
+3. ### Chaos Engineering :
+
+> Chaos Engineering consists of experimenting on a distributed system to strengthen confidence in its ability to withstand turbulent production conditions. Netflix is particularly renowned for popularizing this discipline. For several years, Netflix has been using an internal service called Chaos Monkey, which randomly selects instances of virtual machines hosting production services and finishes them. Chaos Monkey's goal was to encourage Netflix engineers to design software services that can withstand the failures of individual instances. The success of this approach has prompted Netflix to expand the method of injecting failures into the production system to increase reliability. For example, they perform exercises called "Chaos Kong", simulating the failure of an entire Amazon EC2 region, and they also perform failure injection test (FIT) exercises where they induce failures in requests between Netflix services, thus verifying the system's resilience to these situations.
+>
+> These experiments are based on the following four processes :
+>* Construire une hypothèse autour du comportement à l'état d'équilibre
+>* Vary real‐world events
+>* Run experiments in production
+>* Automate experiments to run continuously
+>
+> The main requirement is that Chaos engineering is only active during normal working hours so that engineers can respond quickly if a service fails due to an instance termination. At Netflix, they are using Chaos Engineering to ensure that the system still works properly under a variety of different conditions. For this, there are certain variables that engineers observe. We can mention SPS (stream starts Per Second) which show how many users start streaming a video each second or new account signups per second.
+>
+> The SPS metric varies slowly and predictably over the course of a day, as shown in this screen :
+>
+> <img width="1223" alt="image" src="https://github.com/ZieAmara/VV-ESIR-TP1/assets/90223980/bf69c32a-420c-4b70-b417-a2340af6fb89">
+>
+> Other large companies such as Amazon, Google, Microsoft and Facebook also adopt the chaos engineering approach, it is not exclusive to Netflix. These organizations use similar techniques to assess the resilience of their systems.
+>
+> For companies offering services, chaos engineering proves to be an ideal method to test the resistance of their system. For example, an e-commerce site could choose to measure its system's ability to process a certain number of purchases per second.
+
+4. ### WebAssembly :
+
+> WebAssembly (Wasm) represents a binary instruction format intended for a stack-based virtual machine. It is designed to serve as a portable compilation target, adapted to programming languages, facilitating deployment for both client-side and server-side applications on the Web.
+>
+> The main objective of WebAssembly is to solve the challenge of providing low-level code that is safe, fast and portable on the Web. Previous solutions to this problem, from ActiveX to Native Client via asm.js, have failed to achieve the essential properties that a low-level compilation target should have:
+>
+```Js
+.Safe, fast, and portable semantics:
+	-safe to execute
+	-fast to execute
+	-language-, hardware-, and platform-independent
+	-deterministic and easy to reason about
+	-simple interoperability with the Web platform
+
+.Safe and efficient representation:
+	-compact and easy to decode
+	-easy to validate and compile
+	-easy to generate for producers
+	-streamable and parallelizable
+```
+
+> There are many vulnerabilities. Which, due to common mitigation measures, are no longer exploitable in native binaries, are fully exposed in WebAssembly, but you can never be sure of a developer's error. It would therefore be wise to do tests.
+
+5. ### The mechanized specification:
+
+> The main advantage of the mechanized specification is the heart of mechanization is our definition of two inductive relationships, which correspond to the reduction and typing rules of the WebAssembly specification. These relationships are not directly executable, but we define separate executable functions for an interpreter and a type checker, and we prove that they are correct in relation to their corresponding relationship.
+>
+> The extension of our mechanization to model this feature revealed a gap in the WebAssembly specification that sabotaged the strength of the type system. This specification has therefore helped to improve it. Like many verified language implementations, these artifacts require integration with an external analyzer and linker to run as stand-alone programs, which introduces an unreliable interface.
+>
+> It is used to make our verified interpreter executable as a stand-alone program, because its internal state is more strongly based on the specification project. In particular, the formalization of paper stores the functions declared in WebAssembly programs within each instance itself. This is possible because the formalization only gives a summary description of the instantiation process. In the complete specification project, several instances can share the same store, and one can export a function that is imported by another. Instances cannot directly access each other, and therefore, a single copy of the function can be kept directly in the store, each instance retaining a reference to it.
+>
+> This new specification does not remove the need for tests because we have carried out differential tests of our executable interpreter compared to several large web assembly engines. This was done both in order to validate our interpreter and potentially to discover semantic bugs in commercial WebAssembly engines. The tests were generated using the CSmith tool [Yang et al. 2011], combined with the official Binaryen tool chain [WebAssembly Community Group 2017a] to convert the generated C tests into Web- Assembly. This imitates the way most WebAssembly programs will be produced "in the wild". No errors were found in our implementation or in any commercial engine, although a crash bug was discovered in the Binaryen tool chain itself, which was reported and fixed by the developer.
+
+
